@@ -1,0 +1,430 @@
+/* Общие стили */
+body {
+    font-family: 'Arial', sans-serif;
+    /* Предотвращение мигания фона при смене темы (если применимо) */
+    background-color: #f3f4f6; /* Стандартный светлый режим */
+}
+/* .dark body { background-color: #111827; } */ /* Стандартный темный режим */
+
+/* Высоты контейнеров - calc может конфликтовать с flex-grow. */
+/* Убедитесь, что родительские контейнеры позволяют эти высоты. */
+
+/* Применяем класс к правильному div сайдбара */
+.sidebar-container { /* Класс добавлен в HTML */
+     /* Позволяем flexbox управлять высотой, используем max-height/min-width при необходимости */
+    /* height: calc(100vh - 70px); */ /* Закомментировано - может конфликтовать с flex */
+}
+
+/* Применяем к ID контейнера сообщений */
+#messages-container {
+    /* height: calc(100% - 60px); */ /* Позволяем flex-1 управлять высотой в flex-колонке */
+}
+
+/* Применяем к ID интерфейса звонка */
+#call-interface {
+     /* background-color: rgba(0, 0, 0, 0.8); */ /* Управляется Tailwind bg-opacity в HTML */
+}
+
+/* Стилизация контролов звонка */
+.call-controls {
+     /* background-color: rgba(0, 0, 0, 0.5); */ /* Tailwind лучше справляется с этим */
+}
+
+/* Индикатор печати (Элемент нужно добавить в HTML/JS) */
+.typing-indicator::after {
+    content: '.'; /* Начинаем с одной точки */
+    animation: typing 1.5s infinite;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+@keyframes typing {
+    0% { content: '.'; }
+    33% { content: '..'; }
+    66% { content: '...'; }
+    100% { content: '.'; } /* Возврат к началу */
+}
+
+/* Форма волны для записи/воспроизведения голоса (Требуется интеграция) */
+.waveform {
+    height: 30px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #3b82f6 0%, #3b82f6 var(--progress, 0%), #e5e7eb var(--progress, 0%), #e5e7eb 100%);
+}
+.dark .waveform {
+     background: linear-gradient(to right, #60a5fa 0%, #60a5fa var(--progress, 0%), #4b5563 var(--progress, 0%), #4b5563 100%);
+}
+
+
+/* Стили загрузки аватара (Пересмотренные) */
+.avatar-upload {
+    position: relative;
+    width: 100px; /* Меньший размер */
+    height: 100px;
+    margin: 20px auto; /* Сохраняем отступ */
+}
+
+.avatar-upload .avatar-preview {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 4px solid #fff; /* Скорректированная граница */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.dark .avatar-upload .avatar-preview {
+    border-color: #374151; /* gray-700 */
+}
+
+/* Оверлей для input убран, т.к. в HTML используется label */
+/*
+.avatar-upload input { ... }
+*/
+
+.avatar-upload .edit-icon {
+    position: absolute;
+    bottom: 2px; /* Скорректированная позиция */
+    right: 2px;
+    background: #3b82f6; /* blue-500 */
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    cursor: pointer; /* Делаем иконку кликабельной, если label не сработает */
+}
+.dark .avatar-upload .edit-icon {
+     background: #60a5fa; /* blue-400 */
+     color: #1f2937; /* gray-800 */
+}
+
+
+/* Анимация выезда меню настроек (СЛЕВА) */
+.settings-menu {
+    /* --- Изменения --- */
+    transform: translateX(-100%); /* Начать за левым краем экрана */
+    left: 0;                     /* Привязать к левому краю */
+    right: auto;                 /* Отвязать от правого края */
+    /* --- Остальные стили остаются --- */
+    transition: transform 0.3s ease-in-out;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 40;
+    /* Ширина управляется Tailwind (w-80) */
+    /* Фон/граница управляются Tailwind */
+}
+.settings-menu.open {
+    transform: translateX(0); /* Сдвинуть в видимую область */
+}
+/* Размеры превью файлов и медиа */
+/* Могут конфликтовать с Tailwind max-w классами, установленными в JS */
+.file-preview { /* Для общих превью файлов (не изображений) */
+    max-width: 200px;
+    border-radius: 8px;
+    /* Предпочтительно применять стили динамически в JS */
+}
+
+img.media-preview, /* Применяем к изображениям, добавленным JS */
+video.media-preview { /* Применяем к видео, добавленным JS */
+    max-width: 100%; /* Позволяем полную ширину внутри блока сообщения */
+    max-height: 300px; /* Ограничиваем высоту */
+    border-radius: 8px; /* Постоянное скругление */
+    display: block; /* Предотвращаем лишний отступ снизу */
+    margin-top: 4px; /* Добавляем отступ, если сверху есть текст */
+}
+
+/* Стили прогресс-бара (Пересмотренные) */
+.progress-bar {
+    height: 4px;
+    background-color: #e5e7eb; /* gray-200 */
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 4px; /* Добавляем отступ, если используется */
+}
+.dark .progress-bar {
+    background-color: #4b5563; /* gray-600 */
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #3b82f6; /* blue-500 */
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+/* Стили модального окна деталей пользователя */
+.user-details-modal {
+    /* background-color: rgba(0, 0, 0, 0.5); */ /* Управляется Tailwind bg-opacity */
+}
+
+.user-details-content {
+    max-height: 85vh; /* Скорректированная макс. высота */
+}
+
+/* --- Адаптивный дизайн (Исправлены селекторы и убраны конфликты) --- */
+
+/* Средние экраны (Планшеты) */
+@media (max-width: 1024px) {
+    /* Применяем к контейнеру сайдбара по классу */
+    .sidebar-container {
+        width: 72px;
+        transition: width 0.3s ease;
+    }
+    /* Применяем к элементам, которые нужно скрыть */
+    .sidebar-container .sidebar-hideable {
+        display: none;
+    }
+     /* Центрируем иконки, когда сайдбар свернут */
+    .sidebar-container .sidebar-icon-center {
+         margin-right: auto;
+         margin-left: auto;
+    }
+}
+
+/* Маленькие экраны (Мобильные горизонтально / Большие телефоны) */
+@media (max-width: 768px) {
+    .sidebar-container {
+         width: 0;
+         border: none;
+         padding: 0;
+         overflow: hidden; /* Скрываем сайдбар */
+    }
+    /* Уменьшаем отступы в шапке чата */
+    #chat-header {
+         padding: 0.5rem 1rem; /* py-2 px-4 */
+    }
+    #chat-header .space-x-4 {
+        space-x: 0.75rem; /* space-x-3 */
+    }
+}
+
+/* Очень маленькие экраны (Мобильные вертикально) */
+@media (max-width: 480px) {
+    /* Скрываем шапку чата полностью */
+    /* ПРЕДУПРЕЖДЕНИЕ: Это может ухудшить UX! */
+    /* #chat-header { display: none; } */ /* Закомментировано */
+
+    /* Корректируем отступы в области ввода */
+    .chat-view-input-area { /* Класс добавлен в HTML */
+         padding: 0.5rem; /* p-2 */
+    }
+}
+/* --- Стиль скроллбара как в Telegram --- */
+
+/* Применяем глобально ко всем элементам */
+* {
+    /* Firefox: тонкий скроллбар, цвет ползунка, цвет дорожки */
+    scrollbar-width: thin;
+    /* Полупрозрачный серый ползунок, прозрачная дорожка */
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+/* Стили для темной темы */
+.dark * {
+    /* Полупрозрачный светлый ползунок, прозрачная дорожка */
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+/* Webkit Browsers (Chrome, Safari, Edge, etc.) */
+::-webkit-scrollbar {
+    width: 6px;  /* Тонкая ширина */
+    height: 6px; /* Тонкая высота */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* Полностью прозрачный фон дорожки */
+    margin: 2px 0; /* Небольшой отступ сверху/снизу (опционально) */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2); /* Полупрозрачный темный ползунок для светлой темы */
+    border-radius: 3px;   /* Скругленные углы */
+    border: none;         /* Без границы */
+}
+/* Стиль ползунка для темной темы */
+.dark ::-webkit-scrollbar-thumb {
+     background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный светлый ползунок */
+}
+
+/* Стиль ползунка при наведении мыши */
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4); /* Чуть более заметный при наведении */
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+     background-color: rgba(255, 255, 255, 0.4); /* Чуть более заметный при наведении */
+}
+
+/* Скрываем уголок пересечения скроллбаров */
+::-webkit-scrollbar-corner {
+     background: transparent;
+}
+
+/* Пытаемся убрать стандартные стили скроллбара для IE/Edge (старые) */
+/* Оставить для лучшей совместимости */
+* {
+  -ms-overflow-style: none;
+}
+
+/* --- Стили для галочек статуса сообщения (С БЕЛЫМИ галочками для прочитанных) --- */
+.message-status-ticks {
+    font-size: 0.8em;      /* Чуть меньше времени */
+    margin-left: 4px;      /* Небольшой отступ от времени */
+    display: inline-block; /* Чтобы были на той же строке */
+    vertical-align: middle;/* Выравнивание по центру текста времени */
+    line-height: 1;        /* Убрать лишнюю высоту строки */
+    transition: color 0.3s ease; /* Плавное изменение цвета для 'read' */
+}
+
+/* Серые галочки для 'sent' и 'delivered' */
+.ticks-sent,
+.ticks-delivered {
+    color: #9ca3af; /* gray-400 */
+}
+.dark .ticks-sent,
+.dark .ticks-delivered {
+     /* Для своих сообщений в темной теме можно оставить таким же или чуть светлее */
+     color: #9ca3af; /* gray-400 */
+ }
+
+/* БЕЛЫЕ галочки для 'read' (для своих синих/голубых сообщений) */
+.ticks-read {
+    color: white; /* Белый цвет для прочитанных */
+}
+/* В темной теме белый цвет тоже должен быть хорошо виден */
+/* .dark .ticks-read { color: white; } */ /* Можно не указывать, если совпадает */
+
+
+/* Контейнер для времени и статуса */
+.time-status-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* margin-top: 0.25rem; */ /* Управляется через absolute */
+    font-size: 0.75rem;
+    line-height: 1;
+    position: absolute;
+    bottom: 4px; /* Отступ снизу */
+    right: 8px; /* Отступ справа */
+}
+/* Цвет текста времени для своих сообщений (беловатый) */
+.message-wrapper.justify-end .time-status-wrapper {
+    color: rgba(255, 255, 255, 0.85); /* Чуть более непрозрачный белый для времени */
+}
+/* Цвет текста времени для чужих сообщений */
+.message-wrapper.justify-start .time-status-wrapper {
+    color: #6b7280; /* gray-500 */
+}
+.dark .message-wrapper.justify-start .time-status-wrapper {
+    color: #9ca3af; /* gray-400 */
+}
+
+/* Увеличиваем нижний отступ у НЕ-медиа сообщений, чтобы время/статус не налезали */
+.message-content:not(.media-message) {
+     padding-bottom: 1.5rem !important; /* Доп. место снизу (~pb-6)*/
+}
+/* --- Стили для записи и воспроизведения голосовых сообщений --- */
+
+/* Прогресс записи */
+.waveform-recording {
+    /* Стили контейнера уже заданы Tailwind */
+}
+.waveform-progress {
+    transition: width 0.1s linear; /* Плавное изменение ширины */
+}
+
+/* Контейнер для кастомного плеера в сообщении */
+.voice-message-player {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Расстояние между кнопкой и волной */
+    min-width: 150px; /* Минимальная ширина плеера */
+}
+
+/* Кнопка Play/Pause */
+.voice-play-pause-btn {
+    background: #3b82f6; /* Синий фон */
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px; /* Размер кнопки */
+    height: 32px;
+    flex-shrink: 0; /* Не сжимать кнопку */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.dark .voice-play-pause-btn {
+     background: #60a5fa; /* Светлее синий в темной теме */
+     color: #1f2937;
+}
+
+.voice-play-pause-btn:hover {
+    background-color: #2563eb;
+}
+.dark .voice-play-pause-btn:hover {
+     background: #93c5fd;
+}
+
+.voice-play-pause-btn i {
+    font-size: 0.9em; /* Размер иконки */
+}
+/* Визуализация/Прогресс бар для воспроизведения (переиспользуем .waveform) */
+.waveform-playback-container {
+    flex-grow: 1; /* Занимать доступное пространство */
+    height: 30px; /* Высота как у waveform */
+    background-color: rgba(129, 181, 249, 0.3); /* Полупрозрачный фон */
+    border-radius: 4px;
+    position: relative; /* Для позиционирования прогресса */
+    cursor: pointer; /* Можно кликать для перемотки (пока не реализовано) */
+    overflow: hidden; /* Скрыть выход за границы */
+}
+.dark .waveform-playback-container {
+    background-color: rgba(96, 165, 250, 0.2); /* Фон для темной темы */
+}
+
+/* Прогресс воспроизведения */
+.waveform-playback-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    width: 0%; /* Изначально 0 */
+    background-color: #60a5fa; /* Цвет прогресса */
+    border-radius: 4px;
+    transition: width 0.1s linear; /* Плавное изменение (если используется) */
+    pointer-events: none; /* Не мешать кликам */
+}
+.dark .waveform-playback-progress {
+    background-color: #93c5fd;
+}
+
+/* Длительность сообщения */
+.voice-duration {
+    font-size: 0.75rem; /* text-xs */
+    color: #6b7280; /* gray-500 */
+    flex-shrink: 0; /* Не сжимать текст */
+    padding-left: 4px;
+    font-variant-numeric: tabular-nums; /* Моноширинные цифры */
+}
+.dark .voice-duration {
+     color: #9ca3af; /* gray-400 */
+}
+/* Свои сообщения - цвет длительности */
+.message-wrapper.justify-end .voice-duration {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Скрываем стандартный аудио плеер */
+.voice-audio-element {
+    display: none;
+}
